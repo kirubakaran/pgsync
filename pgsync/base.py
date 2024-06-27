@@ -21,6 +21,7 @@ from .constants import (
 )
 from .exc import (
     LogicalSlotParseError,
+    ParsedValueError,
     ReplicationSlotError,
     TableNotFoundError,
 )
@@ -750,8 +751,8 @@ class Base(object):
         ):
             try:
                 value = int(value)
-            except ValueError:
-                raise
+            except ValueError as e:
+                raise ParsedValueError(f"{e}")
         if type_.lower() in (
             "char",
             "character",
@@ -771,8 +772,8 @@ class Base(object):
         ):
             try:
                 value = float(value)
-            except ValueError:
-                raise
+            except ValueError as e:
+                raise ParsedValueError(f"{e}")
         return value
 
     def parse_logical_slot(self, row: str) -> Payload:

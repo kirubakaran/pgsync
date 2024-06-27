@@ -17,6 +17,7 @@ from pgsync.base import (
 from pgsync.constants import DEFAULT_SCHEMA
 from pgsync.exc import (
     LogicalSlotParseError,
+    ParsedValueError,
     ReplicationSlotError,
     TableNotFoundError,
 )
@@ -410,7 +411,7 @@ class TestBase(object):
         value = pg_base.parse_value("str", "foo")
         assert value == "foo"
 
-        with pytest.raises(ValueError) as excinfo:
+        with pytest.raises(ParsedValueError) as excinfo:
             pg_base.parse_value("int", "foo")
         assert "invalid literal for int() with base 10: 'foo'" in str(
             excinfo.value
@@ -419,7 +420,7 @@ class TestBase(object):
         value = pg_base.parse_value("boolean", "foo")
         assert value is True
 
-        with pytest.raises(ValueError) as excinfo:
+        with pytest.raises(ParsedValueError) as excinfo:
             pg_base.parse_value("float4", "foo")
         assert "could not convert string to float: 'foo'" in str(excinfo.value)
 
